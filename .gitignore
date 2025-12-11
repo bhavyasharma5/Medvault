@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+
+# Database
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+
+# Uploaded files (for testing only)
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build output
+dist/
+build/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+
