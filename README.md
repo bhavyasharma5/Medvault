@@ -320,11 +320,4 @@ Common error codes:
 
 For production deployment considerations, see the [design document](./design.md).
 
-## 📄 License
-
-MIT License - feel free to use this code for your own projects.
-
----
-
-Built with ❤️ by Bhavya Sharma
 
