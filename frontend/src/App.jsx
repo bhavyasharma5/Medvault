@@ -3,7 +3,6 @@ import axios from 'axios';
 
 const API_BASE_URL = 'http://localhost:5001';
 
-// Icons as SVG components
 const Icons = {
   Document: () => (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -86,7 +85,6 @@ const Icons = {
   )
 };
 
-// Format file size
 const formatFileSize = (bytes) => {
   if (bytes === 0) return '0 Bytes';
   const k = 1024;
@@ -95,7 +93,6 @@ const formatFileSize = (bytes) => {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 };
 
-// Format date
 const formatDate = (dateString) => {
   const date = new Date(dateString);
   return date.toLocaleDateString('en-US', {
@@ -107,7 +104,6 @@ const formatDate = (dateString) => {
   });
 };
 
-// Toast Component
 const Toast = ({ message, type, onClose }) => (
   <div className={`toast toast--${type}`}>
     <span className="toast__icon">
@@ -120,7 +116,6 @@ const Toast = ({ message, type, onClose }) => (
   </div>
 );
 
-// Document Card Component
 const DocumentCard = ({ document, onDownload, onDelete, isDeleting }) => (
   <div className="document-card" style={{ animationDelay: `${document.id * 0.05}s` }}>
     <div className="document-card__icon">
@@ -155,7 +150,6 @@ const DocumentCard = ({ document, onDownload, onDelete, isDeleting }) => (
   </div>
 );
 
-// Empty State Component
 const EmptyState = () => (
   <div className="empty-state">
     <div className="empty-state__icon">
@@ -166,7 +160,6 @@ const EmptyState = () => (
   </div>
 );
 
-// Loading Skeleton
 const LoadingSkeleton = () => (
   <>
     {[1, 2, 3].map((i) => (
@@ -175,7 +168,6 @@ const LoadingSkeleton = () => (
   </>
 );
 
-// Main App Component
 function App() {
   const [documents, setDocuments] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -185,7 +177,6 @@ function App() {
   const [isDragging, setIsDragging] = useState(false);
   const [toasts, setToasts] = useState([]);
 
-  // Show toast notification
   const showToast = useCallback((message, type = 'success') => {
     const id = Date.now();
     setToasts(prev => [...prev, { id, message, type }]);
@@ -194,12 +185,10 @@ function App() {
     }, 4000);
   }, []);
 
-  // Remove toast
   const removeToast = useCallback((id) => {
     setToasts(prev => prev.filter(t => t.id !== id));
   }, []);
 
-  // Fetch all documents
   const fetchDocuments = useCallback(async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/documents`);
@@ -214,12 +203,10 @@ function App() {
     }
   }, [showToast]);
 
-  // Load documents on mount
   useEffect(() => {
     fetchDocuments();
   }, [fetchDocuments]);
 
-  // Handle file selection
   const handleFileSelect = (e) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -235,7 +222,6 @@ function App() {
     }
   };
 
-  // Handle drag and drop
   const handleDragOver = (e) => {
     e.preventDefault();
     setIsDragging(true);
@@ -263,7 +249,6 @@ function App() {
     }
   };
 
-  // Handle file upload
   const handleUpload = async () => {
     if (!selectedFile) return;
 
@@ -292,14 +277,12 @@ function App() {
     }
   };
 
-  // Handle document download
   const handleDownload = async (document) => {
     try {
       const response = await axios.get(`${API_BASE_URL}/documents/${document.id}`, {
         responseType: 'blob'
       });
 
-      // Create download link
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement ? window.document.createElement('a') : null;
       if (link) {
@@ -317,7 +300,6 @@ function App() {
     }
   };
 
-  // Handle document deletion
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this document?')) {
       return;
@@ -340,7 +322,6 @@ function App() {
 
   return (
     <div className="app">
-      {/* Header */}
       <header className="header">
         <div className="header__logo">
           <div className="header__icon">
@@ -351,9 +332,7 @@ function App() {
         <p className="header__subtitle">Secure Patient Document Portal</p>
       </header>
 
-      {/* Main Content */}
       <main className="main-grid">
-        {/* Upload Section */}
         <section className="card upload-section">
           <h2 className="card__title">
             <span className="card__title-icon"><Icons.Upload /></span>
@@ -382,7 +361,6 @@ function App() {
             <p className="upload-zone__hint">PDF files only (max 10MB)</p>
           </div>
 
-          {/* Selected File Preview */}
           {selectedFile && (
             <div className="selected-file">
               <div className="selected-file__icon">
@@ -404,7 +382,6 @@ function App() {
             </div>
           )}
 
-          {/* Upload Button */}
           <button 
             className="upload-btn"
             onClick={handleUpload}
@@ -424,7 +401,6 @@ function App() {
           </button>
         </section>
 
-        {/* Documents Section */}
         <section className="card documents-section">
           <div className="documents-header">
             <h2 className="card__title">
@@ -454,12 +430,10 @@ function App() {
         </section>
       </main>
 
-      {/* Footer */}
       <footer className="footer">
         <p>Patient Document Portal &copy; 2025 | Built with React & Express</p>
       </footer>
 
-      {/* Toast Notifications */}
       <div className="toast-container">
         {toasts.map((toast) => (
           <Toast
@@ -475,4 +449,3 @@ function App() {
 }
 
 export default App;
-

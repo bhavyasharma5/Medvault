@@ -7,27 +7,23 @@ const db = require('../database');
 
 const router = express.Router();
 
-// Ensure uploads directory exists
 const uploadsDir = path.join(__dirname, '..', 'uploads');
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
   console.log('📁 Created uploads directory');
 }
 
-// Configure multer for file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, uploadsDir);
   },
   filename: (req, file, cb) => {
-    // Generate unique filename with UUID prefix
     const uniquePrefix = uuidv4().split('-')[0];
     const sanitizedFilename = file.originalname.replace(/[^a-zA-Z0-9._-]/g, '_');
     cb(null, `${uniquePrefix}_${sanitizedFilename}`);
   }
 });
 
-// File filter to accept only PDFs
 const fileFilter = (req, file, cb) => {
   if (file.mimetype === 'application/pdf') {
     cb(null, true);
@@ -40,11 +36,10 @@ const upload = multer({
   storage: storage,
   fileFilter: fileFilter,
   limits: {
-    fileSize: 10 * 1024 * 1024 // 10MB limit
+    fileSize: 10 * 1024 * 1024
   }
 });
 
-// POST /documents/upload - Upload a PDF file
 router.post('/upload', (req, res) => {
   upload.single('file')(req, res, async (err) => {
     if (err instanceof multer.MulterError) {
@@ -73,13 +68,11 @@ router.post('/upload', (req, res) => {
     }
 
     try {
-      // Insert file metadata into database
       const result = await db.runAsync(
         'INSERT INTO documents (filename, filepath, filesize) VALUES (?, ?, ?)',
         [req.file.originalname, req.file.filename, req.file.size]
       );
 
-      // Retrieve the inserted document
       const document = await db.getAsync(
         'SELECT * FROM documents WHERE id = ?',
         [result.lastID]
@@ -91,7 +84,6 @@ router.post('/upload', (req, res) => {
         document: document
       });
     } catch (error) {
-      // If database insert fails, delete the uploaded file
       fs.unlink(req.file.path, () => {});
       console.error('Database error:', error);
       res.status(500).json({
@@ -102,7 +94,6 @@ router.post('/upload', (req, res) => {
   });
 });
 
-// GET /documents - List all documents
 router.get('/', async (req, res) => {
   try {
     const documents = await db.allAsync(
@@ -122,12 +113,10 @@ router.get('/', async (req, res) => {
   }
 });
 
-// GET /documents/:id - Download a specific file
 router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Find document in database
     const document = await db.getAsync(
       'SELECT * FROM documents WHERE id = ?',
       [id]
@@ -142,7 +131,6 @@ router.get('/:id', async (req, res) => {
 
     const filePath = path.join(uploadsDir, document.filepath);
 
-    // Check if file exists on disk
     if (!fs.existsSync(filePath)) {
       return res.status(404).json({
         success: false,
@@ -150,11 +138,9 @@ router.get('/:id', async (req, res) => {
       });
     }
 
-    // Set headers for file download
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename="${document.filename}"`);
 
-    // Stream the file
     const fileStream = fs.createReadStream(filePath);
     fileStream.pipe(res);
   } catch (error) {
@@ -166,12 +152,10 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// DELETE /documents/:id - Delete a file
 router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Find document in database
     const document = await db.getAsync(
       'SELECT * FROM documents WHERE id = ?',
       [id]
@@ -186,10 +170,8 @@ router.delete('/:id', async (req, res) => {
 
     const filePath = path.join(uploadsDir, document.filepath);
 
-    // Delete from database first
     await db.runAsync('DELETE FROM documents WHERE id = ?', [id]);
 
-    // Delete file from disk (don't fail if file doesn't exist)
     if (fs.existsSync(filePath)) {
       fs.unlinkSync(filePath);
     }

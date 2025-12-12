@@ -3,14 +3,11 @@ const cors = require('cors');
 const morgan = require('morgan');
 const path = require('path');
 
-// Import routes
 const documentsRouter = require('./routes/documents');
 
-// Initialize express app
 const app = express();
 const PORT = process.env.PORT || 5001;
 
-// Middleware
 app.use(cors({
   origin: ['http://localhost:3000', 'http://localhost:5173', 'http://127.0.0.1:5173'],
   methods: ['GET', 'POST', 'DELETE'],
@@ -19,15 +16,12 @@ app.use(cors({
 app.use(morgan('dev'));
 app.use(express.json());
 
-// Health check endpoint
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', message: 'Server is running' });
 });
 
-// API Routes
 app.use('/documents', documentsRouter);
 
-// 404 handler
 app.use((req, res) => {
   res.status(404).json({
     success: false,
@@ -35,7 +29,6 @@ app.use((req, res) => {
   });
 });
 
-// Global error handler
 app.use((err, req, res, next) => {
   console.error('Error:', err);
   res.status(500).json({
@@ -44,7 +37,6 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Start server
 app.listen(PORT, () => {
   console.log(`
 ╔═══════════════════════════════════════════════════════════╗
@@ -64,4 +56,3 @@ app.listen(PORT, () => {
 });
 
 module.exports = app;
-

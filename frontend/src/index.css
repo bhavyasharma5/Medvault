@@ -1,32 +1,21 @@
 :root {
-  /* Emerald/Teal Healthcare Theme */
   --color-primary: #10B981;
   --color-primary-dark: #059669;
   --color-primary-light: #34D399;
   --color-accent: #0D9488;
-  
-  /* Backgrounds */
   --color-bg-primary: #0F172A;
   --color-bg-secondary: #1E293B;
   --color-bg-card: #334155;
   --color-bg-card-hover: #3E4C63;
-  
-  /* Text */
   --color-text-primary: #F1F5F9;
   --color-text-secondary: #94A3B8;
   --color-text-muted: #64748B;
-  
-  /* Status */
   --color-success: #10B981;
   --color-error: #EF4444;
   --color-warning: #F59E0B;
-  
-  /* Misc */
   --color-border: #475569;
   --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
   --shadow-card: 0 10px 40px -10px rgba(0, 0, 0, 0.3);
-  
-  /* Typography */
   --font-primary: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 }
@@ -45,7 +34,6 @@ body {
   line-height: 1.6;
 }
 
-/* Background Pattern */
 body::before {
   content: '';
   position: fixed;
@@ -61,7 +49,6 @@ body::before {
   z-index: -1;
 }
 
-/* Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -79,7 +66,6 @@ body::before {
   background: var(--color-text-muted);
 }
 
-/* App Container */
 .app {
   max-width: 1200px;
   margin: 0 auto;
@@ -87,7 +73,6 @@ body::before {
   min-height: 100vh;
 }
 
-/* Header */
 .header {
   text-align: center;
   margin-bottom: 3rem;
@@ -146,7 +131,6 @@ body::before {
   font-weight: 400;
 }
 
-/* Main Grid */
 .main-grid {
   display: grid;
   grid-template-columns: 380px 1fr;
@@ -160,7 +144,6 @@ body::before {
   }
 }
 
-/* Card Base */
 .card {
   background: var(--color-bg-secondary);
   border-radius: 20px;
@@ -185,7 +168,6 @@ body::before {
   color: var(--color-primary);
 }
 
-/* Upload Section */
 .upload-section {
   animation: fadeInLeft 0.6s ease-out 0.1s both;
 }
@@ -274,7 +256,6 @@ body::before {
   display: none;
 }
 
-/* Selected File Preview */
 .selected-file {
   margin-top: 1.25rem;
   padding: 1rem;
@@ -343,7 +324,6 @@ body::before {
   background: rgba(239, 68, 68, 0.1);
 }
 
-/* Upload Button */
 .upload-btn {
   width: 100%;
   margin-top: 1.25rem;
@@ -385,7 +365,6 @@ body::before {
   height: 20px;
 }
 
-/* Spinner */
 .spinner {
   width: 20px;
   height: 20px;
@@ -399,7 +378,6 @@ body::before {
   to { transform: rotate(360deg); }
 }
 
-/* Documents Section */
 .documents-section {
   animation: fadeInRight 0.6s ease-out 0.2s both;
 }
@@ -431,14 +409,12 @@ body::before {
   font-family: var(--font-mono);
 }
 
-/* Document List */
 .document-list {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
 }
 
-/* Empty State */
 .empty-state {
   text-align: center;
   padding: 3rem 2rem;
@@ -462,7 +438,6 @@ body::before {
   font-size: 0.9rem;
 }
 
-/* Document Card */
 .document-card {
   display: flex;
   align-items: center;
@@ -582,7 +557,6 @@ body::before {
   transform: none !important;
 }
 
-/* Toast Notifications */
 .toast-container {
   position: fixed;
   bottom: 2rem;
@@ -660,7 +634,6 @@ body::before {
   background: var(--color-bg-card);
 }
 
-/* Loading Skeleton */
 .skeleton {
   background: linear-gradient(
     90deg,
@@ -682,7 +655,6 @@ body::before {
   height: 76px;
 }
 
-/* Footer */
 .footer {
   text-align: center;
   padding: 2rem;
@@ -701,4 +673,3 @@ body::before {
 .footer a:hover {
   color: var(--color-primary-light);
 }
-

@@ -1,11 +1,9 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 
-// Create database file in the backend directory
 const dbPath = path.join(__dirname, 'documents.db');
 const db = new sqlite3.Database(dbPath);
 
-// Create documents table if it doesn't exist
 db.serialize(() => {
   db.run(`
     CREATE TABLE IF NOT EXISTS documents (
@@ -24,7 +22,6 @@ db.serialize(() => {
   });
 });
 
-// Helper function to run queries with promises
 db.runAsync = function(sql, params = []) {
   return new Promise((resolve, reject) => {
     this.run(sql, params, function(err) {
